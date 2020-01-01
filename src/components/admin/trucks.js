@@ -22,7 +22,7 @@ export default ()=>{
     const [trucks,setTrucks] = useState([]);
 
     useEffect(()=>{
-        axios.get(`${url}/trucks`,{params:{status:"idle"}}).then((res)=>{
+        axios.get(`${url}/truck`,{params:{status:"idle"}}).then((res)=>{
             setTrucks(res.data);
         }).catch((err)=>{
             console.log(err);
@@ -36,7 +36,7 @@ export default ()=>{
         </Typography>
         {
             trucks.map((truck)=>(
-                <div style={{width:"100%"}}>
+                <div style={{width:"100%"}} key={truck.name}>
                 <ExpansionPanel>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMore/>}

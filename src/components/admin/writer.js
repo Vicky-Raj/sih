@@ -4,6 +4,8 @@ import {
     Paper,
     TextField,
     CircularProgress,
+    Snackbar,
+    SnackbarContent,
     Button
 } from "@material-ui/core"
 import {
@@ -11,22 +13,27 @@ import {
     KeyboardDatePicker
 } from "@material-ui/pickers" 
 import {
-    Create
+    Create,
+    CheckCircle,
+    Error
 } from "@material-ui/icons"
 import DateFnsUtils from '@date-io/date-fns';
 
 import { Autocomplete } from "@material-ui/lab";
 import axios from "axios";
 import {url} from "../../App";
+import {green,red} from "@material-ui/core/colors"
 
 
 
 export default ()=>{
 
     const [date,setDate] = useState(new Date());
-    const [name,setName] = useState(null);
-    const [to,setTo] = useState(null);
+    const [name,setName] = useState("");
+    const [to,setTo] = useState("");
     const [loading,setLoading] = useState(false);
+    const [success,setSucess] = useState(false);
+    const [error,setError] = useState(false);
 
 
     const places = [
@@ -37,7 +44,16 @@ export default ()=>{
     ]
 
     const submit = ()=>{
-        axios.post(`${url}/product`,{name,to,date}).then(()=>{})
+        setLoading(true);
+        axios.post(`${url}/product`,{name,to,date})
+        .then(()=>{
+            setLoading(false);
+            setSucess(true);
+        })
+        .catch(()=>{
+            setLoading(false);
+            setError(true);
+        })
     }
 
     return(
@@ -57,7 +73,6 @@ export default ()=>{
                 <Autocomplete
                 options={places}
                 getOptionLabel={place=>place.name}
-                value={to}
                 onChange={(e,value)=>setTo(value)}
                 renderInput={params=>(
                     <TextField {...params} label="To" variant="outlined" fullWidth margin="normal"/>
@@ -87,6 +102,36 @@ export default ()=>{
                 </Button>
                 }               
             </form>
+            <Snackbar
+            anchorOrigin={{vertical:"top",horizontal:"center"}}
+            open={success}
+            autoHideDuration={5000}
+            onClose={()=>setSucess(false)}>
+            <SnackbarContent
+            style={{backgroundColor:green[600]}}
+            message={
+                <span style={{display:"flex",alignItems:"center"}}>
+                    <CheckCircle style={{fontSize:20,marginRight:"1rem"}}/>
+                    Details Written
+                </span>
+            }
+            />
+            </Snackbar>
+            <Snackbar
+            anchorOrigin={{vertical:"top",horizontal:"center"}}
+            open={error}
+            autoHideDuration={5000}
+            onClose={()=>setError(false)}>
+            <SnackbarContent
+            style={{backgroundColor:red[600]}}
+            message={
+                <span style={{display:"flex",alignItems:"center"}}>
+                    <Error style={{fontSize:20,marginRight:"1rem"}}/>
+                    Writing Failed
+                </span>
+            }
+            />
+            </Snackbar>
             </Paper>
         </>
     );
