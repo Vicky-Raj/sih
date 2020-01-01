@@ -61,23 +61,33 @@ const NavBar = ({url})=>{
   return(
     <List>
     <ListItem button component={Link} to={url} selected={pathname === url}>
-      <ListItemIcon><Create/> </ListItemIcon>
+      <ListItemIcon>
+        <Create/>
+      </ListItemIcon>
       <ListItemText primary={"Writer"}/>
     </ListItem>
     <ListItem button component={Link} to={`${url}/loading`} selected={pathname === `${url}/loading`}>
-      <ListItemIcon><CardTravel/></ListItemIcon>
+      <ListItemIcon>
+        <CardTravel/>
+      </ListItemIcon>
       <ListItemText primary={"Loading"}/>
     </ListItem>
     <ListItem button component={Link} to={`${url}/travel`} selected={pathname === `${url}/travel`}>
-      <ListItemIcon><Explore/> </ListItemIcon>
+      <ListItemIcon>
+        <Explore/>
+      </ListItemIcon>
       <ListItemText primary={"Travel"}/>
     </ListItem>
     <ListItem button component={Link} to={`${url}/trucks`} selected={pathname === `${url}/trucks`}>
-      <ListItemIcon><LocalShipping/></ListItemIcon>
+      <ListItemIcon>
+        <LocalShipping/>
+      </ListItemIcon>
       <ListItemText primary={"Trucks"}/>
     </ListItem>
     <ListItem button component={Link} to={`${url}/history`} selected={pathname === `${url}/history`}>
-      <ListItemIcon><HistoryIcon/></ListItemIcon>
+      <ListItemIcon>
+        <HistoryIcon/>
+      </ListItemIcon>
       <ListItemText primary={"History"}/>
     </ListItem>
     <Divider/>
@@ -88,7 +98,7 @@ const NavBar = ({url})=>{
 export default function Admin() {
     const classes = useStyles();
     const theme = useTheme();
-    const small = useMediaQuery(theme.breakpoints.down("xs"));
+    const small = useMediaQuery(theme.breakpoints.down("sm"));
     const [open,setOpen] = useState(false);
     const {url,path} = useRouteMatch();
     useEffect(()=>{

@@ -8,6 +8,9 @@ import {
 import Admin from "./components/admin/admin"
 import Driver from "./components/driver/driver"
 
+export const url = "http://192.168.1.12:5000";
+
+
 export default ()=>(
   <Router>
     <Switch>
