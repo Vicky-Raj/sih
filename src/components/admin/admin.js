@@ -66,6 +66,12 @@ const NavBar = ({url})=>{
       </ListItemIcon>
       <ListItemText primary={"Writer"}/>
     </ListItem>
+    <ListItem button component={Link} to={`${url}/trucks`} selected={pathname === `${url}/trucks`}>
+      <ListItemIcon>
+        <LocalShipping/>
+      </ListItemIcon>
+      <ListItemText primary={"Trucks"}/>
+    </ListItem>
     <ListItem button component={Link} to={`${url}/loading`} selected={pathname === `${url}/loading`}>
       <ListItemIcon>
         <CardTravel/>
@@ -77,12 +83,6 @@ const NavBar = ({url})=>{
         <Explore/>
       </ListItemIcon>
       <ListItemText primary={"Travel"}/>
-    </ListItem>
-    <ListItem button component={Link} to={`${url}/trucks`} selected={pathname === `${url}/trucks`}>
-      <ListItemIcon>
-        <LocalShipping/>
-      </ListItemIcon>
-      <ListItemText primary={"Trucks"}/>
     </ListItem>
     <ListItem button component={Link} to={`${url}/history`} selected={pathname === `${url}/history`}>
       <ListItemIcon>

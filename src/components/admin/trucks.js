@@ -16,23 +16,36 @@ import {
     Button
 } from "@material-ui/core"
 
-import { ExpandMore,Loop } from "@material-ui/icons"
+import { ExpandMore,Loop,LocalShipping } from "@material-ui/icons"
 
 export default ()=>{
     const [trucks,setTrucks] = useState([]);
 
-    useEffect(()=>{
-        axios.get(`${url}/truck`,{params:{status:"idle"}}).then((res)=>{
-            setTrucks(res.data);
+    const fetchTrucks = ()=>(
+    axios.get(`${url}/truck`,{params:{status:"idle"}}).then((res)=>{
+        setTrucks(res.data);
+    }).catch((err)=>{
+        console.log(err);
+    }))
+
+    useEffect(()=>{fetchTrucks()},[])
+
+    const load = ()=>(
+        axios.post(`${url}/truck`,{status:"loading"})
+        .then(()=>{
+            fetchTrucks();
         }).catch((err)=>{
             console.log(err);
         })
-    },[])
+    );
 
     return (
         <div>
         <Typography variant="h4" style={{marginBottom:"1.5rem"}}>
+                <span style={{display:"flex",alignItems:"center"}}>
+                <LocalShipping style={{fontSize:40,marginRight:"1rem"}}/>
                 Idle  Trucks: {trucks.length !== 0 && trucks.length}
+                </span>
         </Typography>
         {
             trucks.map((truck)=>(
@@ -94,7 +107,8 @@ export default ()=>{
                         style={{margin:"0.8rem"}} 
                         variant="contained" 
                         color="primary"
-                        startIcon={<Loop/>}>
+                        startIcon={<Loop/>}
+                        onClick={load}>
                         load
                     </Button>
                 </ExpansionPanelActions>
