@@ -32,7 +32,7 @@ export default ()=>{
     const [name,setName] = useState("");
     const [to,setTo] = useState("");
     const [loading,setLoading] = useState(false);
-    const [success,setSucess] = useState(false);
+    const [success,setSuccess] = useState(false);
     const [error,setError] = useState(false);
 
 
@@ -48,7 +48,7 @@ export default ()=>{
         axios.post(`${url}/product`,{name,to,date})
         .then(()=>{
             setLoading(false);
-            setSucess(true);
+            setSuccess(true);
         })
         .catch(()=>{
             setLoading(false);
@@ -106,7 +106,7 @@ export default ()=>{
             anchorOrigin={{vertical:"top",horizontal:"center"}}
             open={success}
             autoHideDuration={5000}
-            onClose={()=>setSucess(false)}>
+            onClose={()=>setSuccess(false)}>
             <SnackbarContent
             style={{backgroundColor:green[600]}}
             message={

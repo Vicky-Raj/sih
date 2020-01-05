@@ -13,16 +13,21 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    Snackbar,
+    SnackbarContent,
     Button
 } from "@material-ui/core"
 
-import { red } from "@material-ui/core/colors"
+import { red } from "@material-ui/core/colors";
+import {green} from "@material-ui/core/colors";
 
-import { ExpandMore,LocalShipping,Cancel,CheckCircle } from "@material-ui/icons"
+import { ExpandMore,LocalShipping,Cancel,CheckCircle,Error } from "@material-ui/icons"
 
 export default ()=>{
     const [trucks,setTrucks] = useState([]);
     const [products,setProducts] = useState([]);
+    const [success,setSuccess] = useState(false);
+    const [error,setError] = useState(false);
 
     const fetchTrucks = ()=>(
     axios.get(`${url}/truck`,{params:{status:"loading"}}).then((res)=>{
@@ -50,9 +55,13 @@ export default ()=>{
 
     const startTrip = ()=>(
         axios.post(`${url}/truck`,{status:"travel"})
-        .then(fetchTrucks)
+        .then(()=>{
+            fetchTrucks();
+            setSuccess(true);
+        })
         .catch((err)=>{
             console.log(err);
+            setError(true);
         })
     );
 
@@ -178,7 +187,36 @@ export default ()=>{
                 </div>
             ))
         }
-
+        <Snackbar
+        anchorOrigin={{vertical:"top",horizontal:"center"}}
+        open={success}
+        autoHideDuration={5000}
+        onClose={()=>setSuccess(false)}>
+        <SnackbarContent
+        style={{backgroundColor:green[600]}}
+        message={
+            <span style={{display:"flex",alignItems:"center"}}>
+                <CheckCircle style={{fontSize:20,marginRight:"1rem"}}/>
+                Truck1 started it's trip
+            </span>
+        }
+        />
+        </Snackbar>
+        <Snackbar
+        anchorOrigin={{vertical:"top",horizontal:"center"}}
+        open={error}
+        autoHideDuration={5000}
+        onClose={()=>setError(false)}>
+        <SnackbarContent
+        style={{backgroundColor:red[600]}}
+        message={
+            <span style={{display:"flex",alignItems:"center"}}>
+                <Error style={{fontSize:20,marginRight:"1rem"}}/>
+                No products loaded in Truck1
+            </span>
+        }
+        />
+        </Snackbar>
         </div>
     );
 }

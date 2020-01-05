@@ -6,16 +6,23 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery'
-import {Menu} from "@material-ui/icons"
-import { IconButton } from "@material-ui/core"
+import { IconButton, Divider} from "@material-ui/core"
+import {
+  Home as HomeIcon,
+  ListAlt,
+  Menu
+} from "@material-ui/icons"
+import { BrowserRouter as Router,Link,Switch,Route,useRouteMatch,useLocation } from "react-router-dom";
+
+import Home from "./home";
+import Products from "./products"
+
+
 
 const drawerWidth = 215;
 
@@ -43,16 +50,40 @@ const useStyles = makeStyles(theme => ({
   toolbar: theme.mixins.toolbar,
 }));
 
-export default function ClippedDrawer() {
+
+const NavBar = ({url})=>{
+  const {pathname} = useLocation();
+  return(
+    <List>
+    <ListItem button component={Link} to={url} selected={pathname === url}>
+      <ListItemIcon>
+        <HomeIcon/>
+      </ListItemIcon>
+      <ListItemText primary={"Home"}/>
+    </ListItem>
+    <ListItem button component={Link} to={`${url}/products`} selected={pathname === `${url}/products`}>
+      <ListItemIcon>
+        <ListAlt/>
+      </ListItemIcon>
+      <ListItemText primary={"Products"}/>
+    </ListItem>
+    <Divider/>
+  </List>
+  );
+}
+
+export default function Driver() {
     const classes = useStyles();
     const theme = useTheme();
-    const small = useMediaQuery(theme.breakpoints.down("xs"));
+    const small = useMediaQuery(theme.breakpoints.down("sm"));
     const [open,setOpen] = useState(false);
+    const {url,path} = useRouteMatch();
     useEffect(()=>{
         if(!small)setOpen(false);
     },[small])
 
     return (
+    <Router>
     <div className={classes.root}>
         <CssBaseline />
         <AppBar position="fixed" className={classes.appBar}>
@@ -77,28 +108,20 @@ export default function ClippedDrawer() {
         }}
         >
         <div className={small ? null : classes.toolbar} />
-        <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-            </ListItem>
-            ))}
-        </List>
-        <Divider />
-        <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text} selected={true}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-            </ListItem>
-            ))}
-        </List>
+        <NavBar url={url}/>
         </Drawer>
         <main className={classes.content}>
         <div className={classes.toolbar} />
-              
+            <Switch>
+              <Route exact path={path}>
+                <Home/>
+              </Route>
+              <Route  path={`${path}/products`}>
+                <Products/>
+              </Route>
+            </Switch>
         </main>
     </div>
+    </Router>
     );
 }

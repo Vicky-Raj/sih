@@ -26,6 +26,8 @@ import Loading from "./loading"
 import Travel from "./travel"
 import Trucks from "./trucks"
 import History from "./history"
+import Product from "./product";
+
 
 
 
@@ -151,6 +153,9 @@ export default function Admin() {
               <Route path={`${path}/history`}>
                 <History/>
               </Route>
+              <Route  path={`${path}/product/:id`}> 
+                <Product/>
+             </Route>
             </Switch>
         </main>
     </div>

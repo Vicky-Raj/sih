@@ -13,13 +13,17 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    Snackbar,
+    SnackbarContent,
     Button
 } from "@material-ui/core"
 
-import { ExpandMore,Loop,LocalShipping } from "@material-ui/icons"
+import { ExpandMore,Loop,LocalShipping,CheckCircle } from "@material-ui/icons"
+import {green} from "@material-ui/core/colors";
 
 export default ()=>{
     const [trucks,setTrucks] = useState([]);
+    const [success,setSuccess] = useState(false);
 
     const fetchTrucks = ()=>(
     axios.get(`${url}/truck`,{params:{status:"idle"}}).then((res)=>{
@@ -34,6 +38,7 @@ export default ()=>{
         axios.post(`${url}/truck`,{status:"loading"})
         .then(()=>{
             fetchTrucks();
+            setSuccess(true);
         }).catch((err)=>{
             console.log(err);
         })
@@ -116,7 +121,21 @@ export default ()=>{
                 </div>
             ))
         }
-
+        <Snackbar
+        anchorOrigin={{vertical:"top",horizontal:"center"}}
+        open={success}
+        autoHideDuration={5000}
+        onClose={()=>setSuccess(false)}>
+        <SnackbarContent
+        style={{backgroundColor:green[600]}}
+        message={
+            <span style={{display:"flex",alignItems:"center"}}>
+                <CheckCircle style={{fontSize:20,marginRight:"1rem"}}/>
+                Truck1 added to loading stage
+            </span>
+        }
+        />
+        </Snackbar>
         </div>
     );
 }

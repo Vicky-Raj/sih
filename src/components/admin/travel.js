@@ -13,15 +13,30 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    Snackbar,
+    SnackbarContent,
     Button
 } from "@material-ui/core"
-
+import { makeStyles } from '@material-ui/core/styles';
 import { red } from "@material-ui/core/colors"
 import {green} from "@material-ui/core/colors";
-import { ExpandMore,LocalShipping,Cancel} from "@material-ui/icons"
+import { ExpandMore,LocalShipping,Cancel,Error} from "@material-ui/icons"
 import io from "socket.io-client";
+import {useHistory} from "react-router-dom";
+
+const styles = makeStyles({
+    trow:{
+        "&:hover":{
+            cursor:"pointer"
+        }   
+    }
+})
 
 export default ()=>{
+
+    const classes = styles();
+    const history = useHistory();
+
     const [trucks,setTrucks] = useState([]);
 
     const fetchTrucks = ()=>(
@@ -85,14 +100,14 @@ export default ()=>{
                             <TableBody>
                                 {
                                 truck.product.status === "missing" ?
-                                <TableRow>
+                                <TableRow hover={true} classes={{hover:classes.trow}} onClick={()=>history.replace(`product/${truck.product._id}`)}>
                                 <TableCell style={{backgroundColor:red[300]}}>1</TableCell>
                                 <TableCell style={{backgroundColor:red[300]}}>{truck.product.name}</TableCell>
                                 <TableCell align="right" style={{backgroundColor:red[300]}}>{truck.product.to}</TableCell>
                                 <TableCell align="right" style={{backgroundColor:red[300]}}>{truck.product.arrivalDate}</TableCell>
                                 <TableCell align="right" style={{backgroundColor:red[300]}}>{truck.product.status}</TableCell>
                                 </TableRow>:
-                                <TableRow>
+                                <TableRow hover={true} classes={{hover:classes.trow}} onClick={()=>history.replace(`product/${truck.product._id}`)}>
                                 <TableCell style={{backgroundColor:green[300]}}>1</TableCell>
                                 <TableCell style={{backgroundColor:green[300]}}>{truck.product.name}</TableCell>
                                 <TableCell align="right" style={{backgroundColor:green[300]}}>{truck.product.to}</TableCell>
@@ -160,10 +175,23 @@ export default ()=>{
                     </Button>
                 </ExpansionPanelActions>
                 </ExpansionPanel>
+                <Snackbar
+                    anchorOrigin={{vertical:"top",horizontal:"center"}}
+                    open={truck.product.status === "missing"}
+                    onClose={()=>{}}>
+                    <SnackbarContent
+                    style={{backgroundColor:red[600]}}
+                    message={
+                        <span style={{display:"flex",alignItems:"center"}}>
+                            <Error style={{fontSize:20,marginRight:"1rem"}}/>
+                            Product {truck.product.name} is missing
+                        </span>
+                    }
+                    />
+                </Snackbar>
                 </div>
             ))
         }
-
         </div>
     );
 }
